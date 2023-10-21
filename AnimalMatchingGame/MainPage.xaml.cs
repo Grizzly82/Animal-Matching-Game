@@ -36,8 +36,44 @@ public partial class MainPage : ContentPage
         PlayAgainButton.IsVisible = false;
     }
 
+
+    Button lastClicked;
+    bool findingMatch = false;
+    int matchesFound; // initializes the variables matchesFound
+
     private void Button_Clicked(object sender, EventArgs e)
     {
+        if(sender is Button buttonClicked)
+        {
+            if(!string.IsNullOrEmpty(buttonClicked.Text) && (findingMatch == false))
+            {
+                //when the button is clicked it turns the background color from lightblue 
+                //to red, save the item on the button and compares it to the last one clicked
+                buttonClicked.BackgroundColor = Colors.Red;
+                lastClicked = buttonClicked;
+                findingMatch = true;
+            }
+            else
+            {
+                //if the second button clicked does not match the first one 
+                //reset both buttons to light blue
+                if((buttonClicked != lastClicked) && (buttonClicked.Text == lastClicked.Text))
+                {
+                    matchesFound++;
+                    lastClicked.Text = " ";
+                    buttonClicked.Text = "";
+                }
+                lastClicked.BackgroundColor = Colors.LightBlue;
+                buttonClicked.BackgroundColor = Colors.LightBlue;
+                findingMatch = false;
+            }
+        }
+        if(matchesFound == 8)
+        {
+            matchesFound = 0;
+            AnimalButtons.IsVisible = false;
+            PlayAgainButton.IsVisible = true;
+        }
 
     }
 }
